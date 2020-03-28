@@ -17,17 +17,24 @@ RUN apt-get update \
         zenity \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Mono (complete)
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF \
+    && echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic main" | tee /etc/apt/sources.list.d/mono-official-stable.list \
+    && apt-get update \
+    && DEBIAN_FRONTEND="noninteractive" apt-get install -y --install-recommends mono-complete \
+    && rm -rf /var/lib/apt/lists/* \
+
 # Install wine
 ARG WINEBRANCH
 ARG WINE_VER
-RUN wget https://dl.winehq.org/wine-builds/winehq.key \
-    && APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1 apt-key add winehq.key \
-    && apt-add-repository "deb https://dl.winehq.org/wine-builds/ubuntu/ eoan main" \
-    && dpkg --add-architecture i386 \
-    && apt-get update \
-    && DEBIAN_FRONTEND="noninteractive" apt-get install -y --install-recommends winehq-${WINEBRANCH}="${WINE_VER}" \
-    && rm -rf /var/lib/apt/lists/* \
-    && rm winehq.key
+RUN wget https://dl.winehq.org/wine-builds/winehq.key
+RUN APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1 apt-key add winehq.key
+RUN apt-add-repository "deb https://dl.winehq.org/wine-builds/ubuntu/ eoan main"
+RUN dpkg --add-architecture i386
+RUN apt-get update
+RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y --install-recommends winehq-stable="${WINE_VER}"
+RUN rm -rf /var/lib/apt/lists/*
+RUN rm winehq.key
 
 # Download mono and gecko
 ARG MONO_VER
@@ -44,6 +51,7 @@ RUN mkdir -p /usr/share/wine/mono /usr/share/wine/gecko \
 RUN wget https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks \
         -O /usr/bin/winetricks \
     && chmod +rx /usr/bin/winetricks
+    && winetricks
 
 # Create user and take ownership of files
 RUN groupadd -g 1010 wineuser \
@@ -59,16 +67,16 @@ ARG IMAGE_VER
 ARG BUILD_DATE
 ARG GIT_REV
 LABEL \
-    org.opencontainers.image.authors="scottyhardy <scotthardy42@outlook.com>" \
+    org.opencontainers.image.authors="CT" \
     org.opencontainers.image.created="${BUILD_DATE}" \
-    org.opencontainers.image.description="Docker image that includes Wine and Winetricks for running Windows applications on Linux and macOS" \
-    org.opencontainers.image.documentation="https://github.com/scottyhardy/docker-wine/blob/${IMAGE_VER}/README.md" \
+    org.opencontainers.image.description="Docker image for running the RenegadeX server through wine." \
+    org.opencontainers.image.documentation="" \
     org.opencontainers.image.licenses="MIT" \
     org.opencontainers.image.revision="${GIT_REV}" \
-    org.opencontainers.image.source="https://github.com/scottyhardy/docker-wine.git" \
-    org.opencontainers.image.title="docker-wine" \
-    org.opencontainers.image.url="https://github.com/scottyhardy/docker-wine" \
-    org.opencontainers.image.vendor="scottyhardy" \
+    org.opencontainers.image.source="" \
+    org.opencontainers.image.title="RenegadeX-Server-wine" \
+    org.opencontainers.image.url="" \
+    org.opencontainers.image.vendor="" \
     org.opencontainers.image.version="${IMAGE_VER}"
 
 ENTRYPOINT ["/usr/bin/entrypoint"]
