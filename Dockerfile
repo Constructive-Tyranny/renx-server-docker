@@ -19,14 +19,7 @@ RUN apt-get update \
         zenity \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Mono (complete)
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF \
-    && echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic main" | tee /etc/apt/sources.list.d/mono-official-stable.list \
-    && apt-get update \
-    && DEBIAN_FRONTEND="noninteractive" apt-get install -y --install-recommends mono-complete \
-    && rm -rf /var/lib/apt/lists/* \
-
-# Install wine
+# Install wine (Using RUN per line to make sure it gives a clear error.)
 ARG WINEBRANCH
 ARG WINE_VER
 RUN wget https://dl.winehq.org/wine-builds/winehq.key
@@ -49,16 +42,15 @@ ARG GECKO_VER
 #    && wget https://dl.winehq.org/wine/wine-gecko/${GECKO_VER}/wine_gecko-${GECKO_VER}-x86_64.msi \
 #        -O /usr/share/wine/gecko/wine-gecko-${GECKO_VER}-x86_64.msi
 RUN mkdir /opt/wine-stable/share/wine/mono \
-    && wget -O - https://dl.winehq.org/wine/wine-mono/4.9.4/wine-mono-bin-4.9.4.tar.gz |tar -xzv -C /opt/wine-stable/share/wine/mono 
+    && wget -O - https://dl.winehq.org/wine/wine-mono/4.9.4/wine-mono-bin-4.9.4.tar.gz |tar -xzv -C /opt/wine-stable/share/wine/mono
 RUN mkdir /opt/wine-stable/share/wine/gecko \
     && wget -O /opt/wine-stable/share/wine/gecko/wine-gecko-2.47.1-x86.msi https://dl.winehq.org/wine/wine-gecko/2.47.1/wine_gecko-2.47.1-x86.msi \
-    && wget -O /opt/wine-stable/share/wine/gecko/wine-gecko-2.47.1-x86_64.msi https://dl.winehq.org/wine/wine-gecko/2.47.1/wine_gecko-2.47.1-x86_64.msi 
+    && wget -O /opt/wine-stable/share/wine/gecko/wine-gecko-2.47.1-x86_64.msi https://dl.winehq.org/wine/wine-gecko/2.47.1/wine_gecko-2.47.1-x86_64.msi
 
 # Download winetricks
 RUN wget https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks \
         -O /usr/bin/winetricks \
     && chmod +rx /usr/bin/winetricks
-    && winetricks
 
 # Create user and take ownership of files
 RUN groupadd -g 1010 wineuser \
