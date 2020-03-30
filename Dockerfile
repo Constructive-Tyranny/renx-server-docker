@@ -1,6 +1,7 @@
 FROM ubuntu:eoan-20200313
 
 EXPOSE 7777/udp
+EXPOSE 6667/tcp
 
 # Install prerequisites
 RUN apt-get update \
@@ -27,7 +28,7 @@ RUN APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1 apt-key add winehq.key
 RUN apt-add-repository "deb https://dl.winehq.org/wine-builds/ubuntu/ eoan main"
 RUN dpkg --add-architecture i386
 RUN apt-get update
-RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y --install-recommends winehq-stable="${WINE_VER}"
+RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y --install-recommends winehq-stable="5.0.0~eoan"
 RUN rm -rf /var/lib/apt/lists/*
 RUN rm winehq.key
 
@@ -35,17 +36,9 @@ RUN rm winehq.key
 ARG MONO_VER
 ARG GECKO_VER
 #RUN mkdir -p /usr/share/wine/mono /usr/share/wine/gecko \
-#    && wget https://dl.winehq.org/wine/wine-mono/${MONO_VER}/wine-mono-${MONO_VER}.msi \
-#        -O /usr/share/wine/mono/wine-mono-${MONO_VER}.msi \
-#    && wget https://dl.winehq.org/wine/wine-gecko/${GECKO_VER}/wine_gecko-${GECKO_VER}-x86.msi \
-#        -O /usr/share/wine/gecko/wine-gecko-${GECKO_VER}-x86.msi \
-#    && wget https://dl.winehq.org/wine/wine-gecko/${GECKO_VER}/wine_gecko-${GECKO_VER}-x86_64.msi \
-#        -O /usr/share/wine/gecko/wine-gecko-${GECKO_VER}-x86_64.msi
+
 RUN mkdir /opt/wine-stable/share/wine/mono \
     && wget -O - https://dl.winehq.org/wine/wine-mono/4.9.4/wine-mono-bin-4.9.4.tar.gz |tar -xzv -C /opt/wine-stable/share/wine/mono
-RUN mkdir /opt/wine-stable/share/wine/gecko \
-    && wget -O /opt/wine-stable/share/wine/gecko/wine-gecko-2.47.1-x86.msi https://dl.winehq.org/wine/wine-gecko/2.47.1/wine_gecko-2.47.1-x86.msi \
-    && wget -O /opt/wine-stable/share/wine/gecko/wine-gecko-2.47.1-x86_64.msi https://dl.winehq.org/wine/wine-gecko/2.47.1/wine_gecko-2.47.1-x86_64.msi
 
 # Download winetricks
 RUN wget https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks \
