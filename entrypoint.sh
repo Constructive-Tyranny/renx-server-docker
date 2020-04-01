@@ -6,4 +6,4 @@ if [ -f /root/.Xauthority ]; then
     chown wineuser:wineuser /home/wineuser/.Xauthority
 fi
 
-exec gosu wineuser "$@"
+exec gosu wineuser /usr/bin/server_manager "$@"

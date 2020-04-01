@@ -51,8 +51,10 @@ RUN groupadd -g 1010 wineuser \
     && chown -R wineuser:wineuser /home/wineuser
 
 VOLUME /home/wineuser
+VOLUME /mounted_volume
 COPY pulse-client.conf /etc/pulse/client.conf
 COPY entrypoint.sh /usr/bin/entrypoint
+COPY server_manager.sh /usr/bin/server_manager
 
 WORKDIR /home/wineuser
 ARG IMAGE_VER
