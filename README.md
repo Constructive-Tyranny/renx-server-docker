@@ -2,7 +2,7 @@
 The purpose of this project is to allow people to get a Renegade X server on Linux quick and easy.
 Initially gotten to work by Sho-kun & Testman solely for the usage for CT, licensed to the public anyway.
 
-There's a big chance this project will later get another version, solely for the Renegade X game client. (There is already a Lutris solution!)
+There's a big chance this project will later get another version, solely for the Renegade X game client. (There is already a [Lutris solution](https://lutris.net/games/renegade-x/)!)
 
 ## So.. why start this project?
 (Apart from the fact Sho-kun & Testman dislike Windows)
@@ -10,10 +10,6 @@ The only reason why you would bother using a Windows server is because Renegade 
 And since Renegade X can only use one thread on Windows, you also need a good CPU with high single core performance.
 Using Wine, we managed to work around the one core limit, meaning we can host servers with lower requirements.
 This saves money on both the server and the Windows license!
-
-
-
-
 
 
 ### So.. Why bother with this project if there's already a Lutris solution?
