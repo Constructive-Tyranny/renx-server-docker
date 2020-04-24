@@ -73,5 +73,8 @@ LABEL \
     org.opencontainers.image.vendor="" \
     org.opencontainers.image.version="${IMAGE_VER}"
 
+# create wineprefix
+RUN wine wineboot
+
 ENTRYPOINT ["/usr/bin/entrypoint"]
 CMD ["/bin/bash"]
