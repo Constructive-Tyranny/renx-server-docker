@@ -54,7 +54,7 @@ VOLUME /home/wineuser
 VOLUME /mounted_volume
 COPY pulse-client.conf /etc/pulse/client.conf
 COPY entrypoint.sh /usr/bin/entrypoint
-COPY server_manager.sh /usr/bin/server_manager
+COPY server_manager.py /usr/bin/server_manager
 
 WORKDIR /home/wineuser
 ARG IMAGE_VER
