@@ -1,7 +1,9 @@
 FROM ubuntu:eoan-20200313
 
+EXPOSE 7777
 EXPOSE 7777/udp
-EXPOSE 6667/tcp
+
+ENV TERM xterm
 
 # Install prerequisites
 RUN apt-get update \
@@ -18,6 +20,7 @@ RUN apt-get update \
         wget \
         winbind \
         zenity \
+        libpng-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Install wine (Using RUN per line to make sure it gives a clear error.)
@@ -73,8 +76,17 @@ LABEL \
     org.opencontainers.image.vendor="" \
     org.opencontainers.image.version="${IMAGE_VER}"
 
+# switch to non-root user 
+USER wineuser
+
 # create wineprefix
-RUN wine wineboot
+RUN wine64 wineboot
+RUN winetricks win7
+RUN winetricks -q corefonts xact xact_x64 d3dx9_43 d3dx9 msxml3
+RUN winetricks win7
+#RUN winetricks -q vcrun2008
+#RUN winetricks -q vcrun2010
+
 
 ENTRYPOINT ["/usr/bin/entrypoint"]
 CMD ["/bin/bash"]
